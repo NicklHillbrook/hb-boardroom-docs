@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boardroom Documentation</title>
+    <!-- External Resources -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&family=Libre+Franklin&display=swap" rel="stylesheet">
+
+    <!-- CSS Styles -->
+    <style>
+        :root {
+          --heading-font: 'Raleway', sans-serif;
+          --body-font: 'Libre Franklin', sans-serif;
+        }
+        body {
+          font-family: var(--body-font);
+          line-height: 1.6;
+        }
+        h1, h2, h3, h4 {
+          font-family: var(--heading-font);
+          font-weight: 700;
+          color:  #003766;
+        }
+        /* --- Section Styling --- */
+        .section-title {
+          font-family: var(--heading-font);
+          font-weight: 600; /* Slightly bolder for sections */
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          color:  #003766;
+          /* Tailwind classes applied in HTML for padding/border */
+        }
+        .section-content {
+          display: none;
+          padding-left: 1.75rem; /* Align with text after chevron */
+           /* Tailwind class py-3 applied in HTML */
+        }
+        .section-content.active {
+          display: block;
+        }
+
+        /* --- Subsection Styling --- */
+        .subsection-title {
+          font-family: var(--body-font);
+          font-weight: 500; /* Default weight */
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          padding-left: 0; /* Reset padding, handled by parent .section-content */
+          font-size: 1rem; /* Keep consistent */
+          color: #4a5568; /* gray-700 */
+           /* Tailwind classes p-2 border-b applied in HTML */
+        }
+        /* Override styling for troubleshooting subsection titles */
+        #troubleshooting .subsection-title {
+          font-weight: 700; /* Bold for troubleshooting */
+        }
+        .subsection-content {
+          display: none;
+          padding-left: 1.75rem; /* Indent subsection content */
+           /* Tailwind class py-2 applied in HTML */
+        }
+        .subsection-content.active {
+          display: block;
+        }
+
+        /* --- Chevron Styling --- */
+        .chevron {
+          display: inline-flex; /* Use flex to center svg */
+          align-items: center;
+          justify-content: center;
+          width: 1rem; /* Size of the clickable area */
+          height: 1rem;
+          margin-right: 0.75rem; /* Space between chevron and text */
+          flex-shrink: 0; /* Prevent chevron from shrinking */
+        }
+        .chevron svg {
+          width: 10px; /* SVG visual size */
+          height: 6px;
+          transform: rotate(0deg);
+          transition: transform 0.3s ease;
+          stroke: currentColor; /* Inherit color */
+        }
+        .section-title.active .chevron svg,
+        .subsection-title.active .chevron svg {
+          transform: rotate(180deg); /* Rotate when parent title is active */
+        }
+
+        .important-notice {
+    border-left: 4px solid #ffd471;
+    background-color: #fff8e6;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+  }
+ 
+
+        /* --- General List/Link Styling --- */
+        ul {
+          list-style-type: disc;
+          padding-left: 1.5rem; /* Original padding */
+           /* Tailwind class my-2 applied in HTML */
+        }
+        /* Nested lists */
+        ul ul {
+            margin-top: 0.25rem; /* Add some space above nested lists */
+            margin-bottom: 0.25rem;
+            /* Keep padding relative to parent */
+        }
+        .toc-link {
+          text-decoration: none;
+          color: #333;
+          display: block;
+          padding: 0.25rem 0;
+        }
+        a {
+            color: #2563eb; /* blue-600 */
+            text-decoration: underline;
+        }
+
+        /* --- Control Border Styling --- */
+        .control-border {
+          border: 1px solid #cbd5e1; /* Light gray border (Tailwind gray-300) */
+          padding: 0.1em 0.4em;
+          border-radius: 4px;
+          background-color: #f8fafc; /* Very light background (Tailwind slate-50) */
+          font-size: 0.95em; /* Slightly smaller */
+          /* Ensure vertical alignment is consistent */
+          vertical-align: baseline;
+          /* Prevent line breaks within the span */
+          white-space: nowrap;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Main Content -->
+<div class="bg-white text-gray-800 px-4 py-6 max-w-3xl mx-auto">
+  <header class="mb-8 flex items-center">
+    
+    <!-- Your SVG Logo -->
+    <svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180.62 116.37" class="h-10 w-auto mr-4"> {/* Adjust h-10 and mr-4 as needed */}
+      <defs><style>.cls-1{fill:#16498d;stroke-width:0px;}.cls-2{fill:none;stroke:#14478e;stroke-width:.16px;}</style></defs><g id="Layer_1-2"><path class="cls-1" d="M100.49,79.64l-.19.52s-.52.9-.84,1.03c-.32.13-.58.32-.9.58-.32.26-.65.58-.77.64-.13.06-1.09.9-1.09.9,0,0-.32-.45-.32-.9v-1.93c0-.19-.32-.84-.32-.84v-1.35c0-.13.65-1.29.65-1.29h.39l.71.26v.75s.19.41.65.48c.45.06.45-.19.77-.26.32-.06.71.39.71.58s-.39.52-.06.84c.32.32.64,0,.64,0M85.02,77.78c-.06.26-.51.26-.77.19-.26-.06-.77-.39-1.03-.51-.26-.13-.97-.9-1.1-.97-.13-.06-.97-1.16-1.61-1.29-.65-.13-1.35-.45-1.74-.45s-.64-.32-.64-.32l-.39-.39s.19-.39.45-.19c.26.19.65.44.71.19.07-.25.01-1.08.13-1.03.71.32.84.29,1.03.57.19.27.45,0,.58,0s.28-.64.39-.57c.84.57.71.41.71.78s-.5.51,0,.84c.51.32,1.09.39,1.28.51.19.13.64.26.84.26s.45-.13.45.26-.19.45,0,.71c.19.26.32.19.45.58.13.39.32.58.26.84M160.18,72.68c0-.32-.39-.39-.52-.45-.13-.06-.26-.45-.26-.45,0,0-.51-.19-.71-.39-.19-.19.32-.58.71-.97.39-.39-.26-.45-.26-.45,0,0-.32-.26-.32-.52s.39-.45.58-.58c.19-.13.71-.64.65-1.03-.06-.39-.39-.39-.58-.58-.19-.19-.58-.06-.77,0-.19.06-.77.45-1.29.45s-.13-.32-.64-.84c0,0-.52.19-.77.13-.26-.06,0-.06-.13-.64-.13-.58-.19.13-.58.19-.39.06-.19-.19-.39-.32-.19-.13-.97-.06-1.03-.26-.07-.19.26-.32.52-.84.26-.52-.45-.19-.71-.32-.26-.13-.26-.45.13-.58q.39-.13.71-.26c.32-.13.71.26.77.39.06.13.26.52.26.52,0,0,.58-.06.71-.26.13-.19.58.13.9,0,.32-.13.77-.32.9-.52.13-.19-.19-.71-.26-.97-.07-.26,0-.19,0-.19,0,0,.9-.39,1.16-.65s0-1.16.07-1.29c.06-.13.45-.52.45-.77s-.13-.45-.39-.58c-.26-.13-.64-.19-.64-.39s.13-.45,0-.71c-.13-.26-.32-.45-.52-.45s-1.1.51-1.48.39c-.39-.13-.64-.13-.84-.39-.19-.26,0-.39-.19-.45-.19-.06-.39-.32-.45-.58-.07-.26.26-.19.32-.51.06-.32.71-.26.77-.52.07-.26.19-.79-.32-.97-.17-.06-.06-.39-.13-.51-.06-.13-.52,0-1.03.19-.52.19-.58-.19-.58-.39s-.26-.51-.39-.84c-.13-.32-.32-.19-.81,0-.48.19-.87.39-1.13.26-.26-.13-.06-.39-.19-.64-.13-.26-.13-.32-.32-.45-.19-.13.39-.65.39-.84s-.06-.39-.58-.19c-.52.19-.45-.19-.52-.32-.06-.13.45-.71.32-.9-.13-.19-.39-.13-.58,0-.19.13-.97.13-1.22.06-.26-.06-.32-.32-.26-.77.06-.45.06-.07.52.26.45.32.58-.19.58-.19,0,0,.13-.26.45-.71.13-.19.84-.26,1.03-.45.19-.19.26-.26.32-.71.06-.45-.06-.26,0-.58.06-.32.52-.06.71-.58.19-.52-.65-.19-.84-.32-.19-.13.45-.45,1.03-1.16s.13-.65,0-.65-.45,0-.9-.06c-.45-.07-.32-.58-.45-.65-.13-.06-.26-.26-.26-.58s0-.32-.13-.71c-.13-.39-.45-.32-.84-.32s-.32.32-.71.13c-.39-.19-.45-.26-.65-.32-.19-.06-.84.07-1.29.07s-.58-.13-.84-.45c-.26-.32-.71-.52-1.03-.71-.32-.19-.19-.45.07-.39.26.06.9-.19.77-.32-.13-.13-.39-.58-.39-.58,0,0-.97-.13-1.1-.13s.39-.64.39-.64l-.45-.45s-1.1,0-1.42-.06c-.32-.07.13-.58.26-.84.13-.26.45-.71.39-1.1-.07-.39.13-.45,0-.45s-.71-.07-.9-.13c-.19-.07-.19-.26.13-.39.32-.13.9-.32.64-.77-.26-.45-.64-.39-.9-.45-.26-.07.06-.19.39-.52.32-.32.58-.97.58-.97l.39-.84s-.58.06-.84.19c-.26.13-.58.06-.77.06s-.58-.13-.58-.13c0,0-.26-.32-.58-.64-.32-.32-.39.06-.64,0-.25-.06-.13-.19-.26-.39-.13-.19.26-.45-.32-1.1-.09-.1-.52.13-.71,0-.19-.13-.32-.64-.26-.77.06-.13.45-.52.45-.52,0,0,.71-.13.84-.26.13-.13.39-.51.19-.58-.19-.06,0-.52,0-.52,0,0-.3-.26-.77-.32-.47-.06.19-.51.19-.51l.28-.71s0-.71-.21-.71-.97-.26-1.16-.39c-.19-.13.26-.32.45-.39.19-.06.84-.26.84-.26,0,0,.19-.52,0-.52s-.71-.13-1.03-.32c-.32-.19-.45.13-.77.32-.32.19-.45-.26-.52-.58-.07-.32-.45-.65-.64-.77-.19-.13-.26.19-.26.19,0,0-.39.84-.45,1.03-.06.19-.53.58-.53.71s-.57-.32-.63-.45c-.07-.13.26-.71.52-.84.26-.13,0-.71,0-.84s-.45-.64-.45-.64c-.13.06-.51.52-.71.52s-.32.26-.32.26l-.65.06s-.13-.19-.77-.26c0,0-.19.71-.19.9s.26.39.26.39c0,0,.77,0,1.04.13.26.13-.07.64,0,.84.06.19-.52.71-.65.71s-.45-.45-.58-.51c-.13-.07-.26-.58-.45-.77-.19-.19-.71-.13-1.03-.26-.32-.13-.64-.32-.77-.45-.13-.13.42-.58.42-.58,0,0-.35-.64-.35-.9s.32-.52.32-.52c0,0,.07-.45,0-.71-.06-.26-.26-.51-.51-.51s-.84.51-.97.64c-.13.13-.58.45-.9.52-.32.06-.39-.32-.77-.32s-.39.32-.65.39c-.26.07-1.1-.19-1.29-.26-.19-.06-.65-.45-.95-.45s-.92.13-1.25.19c-.32.06-.9-.13-.9-.13,0,0-.45-.26-.45-.39s.64-.26.77-.19c.13.06.77.06.77.06l.97-.51s.19-.45,0-.52c-.19-.07-.68-.13-1.03-.07-.35.07-.32-.39-.32-.39,0,0-.13-.45-.19-.71-.07-.26.26-.58.32-.71.06-.13-.39-.26-.39-.26,0,0-1.03.45-1.03.58s-.19.58-.32.9c-.13.32-.32.19-.77.32-.45.13-.64-.06-.77-.19-.13-.13.39-.39.52-.52.13-.13.32-.52.32-.71s0-.77-.06-.9c-.07-.13-.07-.39,0-.64.06-.26.39,0,.71-.07.32-.06.26-.06.52-.19.26-.13.52.06.64,0,.13-.06.71-.26.97-.52.26-.26.32-.51,0-.77-.32-.26-.71-.06-.84-.13-.13-.06-.39-.32-.39-.32,0,0-.45-.13-.64-.19-.19-.06.19-.58.19-.77v-.45l-.58-.26-.19-.26s-.07-.58,0-.97c.06-.39-.32-.64-.32-.64-.13,0-.58-.19-.77-.26-.19-.06-.52.32-.77.52-.26.19-.58.19-.58.19,0,0-.45-.39-.71-.45-.26-.07-.39.32-1.16.26-.2-.02-.32,0-.52.26-.19.26-.45-.13-1.42-.19l.13-.65-.71-.39-.26-.45s1.16.06,1.29.13c.13.06.97-.13.97-.13,0,0-.52-.39-.64-.52-.13-.13-.71-.45-.84-.45s-.52-.26-.52-.26v-.97c0-.19-.77.07-.9.13-.13.07-1.22.26-1.48.32-.26.06-.71-.19-.84-.39-.13-.19.9-.26.9-.26,0,0,.84-.52.84-.64s.39-.64.39-.64c0,0-.64,0-.77.06-.13.07-.71.19-.71.19l-.71-.19s-.39-.32-.52-.64c-.13-.32-.19-.32-.32-.39-.13-.06-.52.19-.52.19l-.64.58s.19.45.77.52c.58.06,0,.39,0,.39,0,0-.45.19-.71.39-.26.19-.71.13-.77-.06-.07-.19.06-.45,0-.58-.07-.13-.07-.84-.07-.84,0,0-.32-.26-.45-.26s-.45-.45-.58-.58c-.13-.13,1.1-.51,1.1-.71s.39-.13.77-.39c.39-.26.58-.52.58-.65s-.52-.45-.64-.58c-.13-.13-.97.19-.97.19,0,0-1.03.26-1.16.13-.13-.13-.58-.51-.77-.71-.19-.19-.45.13-.84.13s-.39-.84-.45-.97c-.07-.13-.64-.26-1.1-.19-.45.06-.58.26-.65.45-.06.19-.26.71-.52.84-.26.13-.52-.13-.77-.06-.26.06-.26.39-.39.39s-.19.32-.19.32c0,0-.45.26-1.03.51-.58.26-.45-.13-.58-.32-.13-.19-.13.06-.58.39-.45.32-.39.32-.64.19s.32-.45.26-.71c-.07-.26-.13-.45-.26-.77-.13-.32-.26.19-.32.39-.06.19-.39.58-.77.52-.39-.06.19-.52.19-.77s-.32-.26-.71-.45c-.39-.19-.71,0-.84.07-.13.06-.26.39-.26.39,0,0-.26.45-.39.52-.13.06-.77-.13-.77-.13,0,.19-.58.07-.58.07,0,0-.45-.32-.58-.58-.13-.26-.39.13-.52.13s-.39.58-.39.58l.19.58-.26.71s-.13-.19-.26-.26c-.13-.07-.45.26-.77.39-.32.13-.26-.32-.39-.39-.13-.07-.19-.26-.32-.45-.13-.19-.26-.13-.71.07-.45.19,0,.71-.19.71s-.39-.13-.45-.26c-.07-.13-.32-.13-.65,0-.32.13-.84,0-.84,0,0,0,.26-.52,0-.84-.26-.32-.58-.32-.77-.26-.19.06,0,.51,0,.65s.06.64-.26.71c-.32.06-.32-.19-.52-.26-.19-.06-.32-.32-.71-.26-.39.06-.19.52-.39.71-.19.19-.64-.06-.9-.06s-.13-.32-.19-.52c-.06-.19-.39-.39-.39-.58s.06-.51,0-.84c-.07-.32-.39-.32-.52-.51-.13-.19-.39-.26-.39-.26l-.71.71s0,.57.32.57.13.53,0,.66c-.13.13-.26-.06-.65-.13-.39-.07-.71.13-.71.13l-.26.9s-.45-.26-.45-.58-.26-.39-.32-.84c-.06-.45-.26.32-.32.45-.06.13-.45.64-.52.9-.06.26-.19.71-.19.71,0,0-.64.39-.77.39h-.45s.19-.45.19-.64.06-.52,0-.77c-.07-.26-.47-.32-.9-.26-.44.07-.26.19-.52.71-.06.12-.58-.06-.84,0-.26.07-.39.58-.32.71.07.13.58.36.52.52-.07.15-.52.13-.77.26-.26.13-.45.51-.45.32s-.26-.58-.45-.71c-.19-.13-.58.32-.71.58-.13.26.19.77.58,1.03.39.26-.06.46-.06.46,0,0-.9.38-.9.51s-.06.58-.06.58c0,0-.52.71-.77.45-.26-.26-.32-.71-.71-1.03-.39-.32-.65-.64-.65-.45s-.39.77-.26,1.03c.13.26.52,1.03.52,1.03,0,0-.64.32-.64.45s0,1.1-.07,1.22c-.06.13-.32.26-.32.26,0,0-.58-1.1-.84-1.1s-.26,1.61-.26,1.48-1.48-.77-1.48-.77l.32.97s-.13.06-.32-.06c-.19-.13-.45-.39-.64-.64-.19-.26-.32.06-.52.13-.19.07-.65,0-.65,0,0,0-.84.13-1.16.52-.32.39-.26.26-.45.26s-.64,0-.84-.13c-.19-.13.19-.39.19-.77s-.39-.26-.64-.32c-.26-.06-.39-.32-.9-.26-.52.07-.13.62-.26.9-.13.28-.45,0-.45-.13s-.52-.26-.84,0c-.32.26-.13.64-.13.9s.13.31.13.31c0,0-.58,0-.84.14s-.32.52-.52.45c-.19-.06-.52-.52-.64-.58-.13-.06-.71.26-.71.26,0,0,.45.9.71,1.16.26.26-.13.13-.32.39-.19.26-.84,0-.84.58s.13.45.19.58c.06.13-1.1.32-1.29.26-.19-.07-.65-.32-.77-.45-.13-.13-.77-.71-.84-.84-.06-.13-.77-.13-.77-.13,0,0-.19.9-.13,1.03.06.13.39.32.39.45s.45.65.45.65c0,0-.45.39-.64.45-.19.06-.13.64-.13.77s.26.78.19.9c-.07.13-.71-.07-.84-.19-.13-.13-.26-.32-.58-.58-.32-.26-.32,0-.52.19-.19.19-.39-.13-.65-.45-.26-.32-.58-.32-.84-.39-.26-.07-.26.39-.13.64.13.26.26.84.19,1.23-.07.39-.58-.32-.77-.45-.19-.13-.45-.45-.84-.45s.13.32.13.58.26.58-.32.84c-.13.06-.52.26-.64.39-.13.12-.71.06-.92-.06-.21-.13-.43,0-.56,0s0,.51,0,.51v.77s.56.32.77.39c.21.06.39.45.32.64-.06.19-.53.07-.71,0-.17-.06-.71.32-.84.32s0,.58.19.87c.19.28,0,.23-.19.49-.19.26-.45-.19-.97-.39-.52-.19-.58-.06-.77,0-.19.06,0,.52,0,.64s.19.84.26,1.03c.06.19.84.97.84.97,0,0,.26.39-.07.52-.32.13-.9.52-.9.52l.26.58s.06.45-.07.52c-.13.06-.39.32-.64.51-.26.19.13.58.19.71.06.13.32.58.32.58,0,0-.77.45-.9.45s.06.64.06.77.39.71.39.71l.06.64s-.26-.19-.45-.26c-.19-.06-.45-.39-.71-.58-.26-.19-.13-.97-.32-.97s-.32.64-.39.9c-.06.26.13.45-.39.52-.52.06.19-.64-.06-.9-.26-.26.19-.77-.19-1.1-.39-.32-.45-.26-.9.06-.45.32-.13.77-.26.77s-.39-.39-.71-.71c-.32-.32-.64-.71-.64-.71,0,0-.26.58-.26.77s.19.52.32.64c.13.13.06.52.26.64.19.13.19.84.19.84h-.97c-.26,0-.45.32-.45.52s-.39,0-.52,0-.26.39-.32.58c-.07.19,0,.58.13.9.13.32-.52.32-.77.32s-.9-.13-1.1-.13-.39.39-.45.58c-.06.19-.06.39-.52.58-.45.19-.65.51-.84.64-.19.13-.26.45-.58.45h-.84s-.71.52-.71.9-.32.32-.52.32-.77-.39-1.03-.45c-.26-.07-.32.45-.13.58.19.13.71.51.9.51s.52.45.77.64c.26.19-.26.39-.45.32-.19-.06-.97.26-1.23.26s0,.39.32.58c.32.19.32.65.39.78.07.13-.45.32-.52.58-.07.26.06.71.26.97.19.26,1.03.65,1.03.65,0,0-.07.52.26.71.32.19.39.84.26.84s-.65-.32-.71-.45c-.07-.13-.84-.39-1.03-.39s-.32.9-.26,1.03c.07.13.45.64.58.71.13.07.71.13.97.19.26.06.32.71.45.86s.39.43.77.49c.39.06.32.39.32.39l-.71.51s-.32-.39-.52-.71c-.19-.32-.06-.45-.32-.64-.26-.19-.32.39-.45.58-.13.19-.39.71-.51.77-.13.07-.19.32-.32.32s-.64-.07-.71-.19c-.06-.13-.19-.39-.51-.39s-.65-.07-.84,0c-.19.06-.84.26-1.09.26s-.45.65-.45.65c0,0,.45.58.45.77s.45.39.45.39c0,0-.77.06-.9,0-.13-.06-.71-.39-.71-.39,0,0-.52.13-.58.32-.06.19-.06.71-.32.77-.26.06-.84.32-.97.45-.13.13.19.52.19.52,0,0,.39.19.39.32s-.19.65-.19.77-.58.51-.71.58c-.13.06.19.79.19.79,0,0,.52.18.71.05.19-.13.13.07.32,0,.19-.06.52.58.52.58l.32,1.1-.26.52-.51.58s.19.9.51.97c.32.06.39.71.26,1.03-.13.32.39.84.52.84s.45.39,1.16.58c.71.19.13.45.07.64-.07.19-.26.77-.32.9-.07.13.32.52.13.87-.12.23.07.61-.13.54-.19-.07-.64-.32-.9-.39-.26-.06-.52-.13-.9-.13s-.58-.06-.77,0c-.19.07-.39.84-.52,1.16-.13.32-.39-.26-.52-.39-.13-.13-.77-.39-.97-.45-.19-.06-.84,0-1.23.39-.39.39-.19.39-.19.39h-.9c-.52,0-.9.39-.9.39l.58.26v.71c0,.45.32,1.03.32,1.03,0,0,.19.51.07.51s-.52.06-.71.19c-.19.13-.07.64-.07.77s-.32-.06-.84-.26c-.52-.19-1.03.19-1.16.19s.13.45.45.58c.32.13.65.26,1.03.32.39.06.39.19.39.19,0,0-.32.65-.58.97s-.71.26-.9.26-1.16.26-1.16.26c0,0-.19.77,0,1.1.19.32.9,0,.9,0l.51.71s.52-.06.77,0c.26.06.52.45.58.58.07.13-.06.45-.06.71s.19.26.64.32c.45.06.19.45.07.58-.13.13-.45.32-.65.51-.19.19.07.52.07.52l-.64.26c-.65.26-.32.58-.32.58l.52.45.9.06.71-.13.39-.45.39-.33.52.59h1.03s.32-.26.39-.51c.07-.26.43.26.43.26,0,0,.2.64.03.64s.58.32.58.32l.39.45s.26-.39.13-.45c-.13-.06.52.13.52.13l.58.52s.26-.65.19-.97c-.07-.32.32-.26.45-.26s.26.52.26.65.13.71.13.71h.52v.39c0,.13-.39.52-.39.52,0,0-.19.26-.32.52-.13.26,0,.45-.45.45s-.45.39-.52.64c-.06.26-.13.52-.19.65-.06.13-.45.58-.84.64-.39.06-.77.26-.77.39s-.19.64,0,.84c.19.19.19.45.32.58.13.13.52.45.71.52.19.06.58.77.58.77,0,0,.26.32.26.65s0,.58-.26.82c-.26.23-.13.6-.13.8s.32.26.45.26.52.19.52.32v.65c0,.26.19,1.03.45,1.29.26.26.39.06.9-.13.22-.08.26-.32.32-.77.06-.45.13-.45.39-.77.26-.32.39.06.71,0,.32-.07.51.13.64.32.13.19,0,.45.19.65.19.19.58.58.9.64.32.07.64-.32.71-.58.07-.26.26-.45.26-.45,0,0,.39-.06.77-.06s.52,0,.9-.32c.39-.32.32-.19.32-.19,0,0,.58.45.58.58s-.06.52,0,.84c.07.32.77.26.77.26l.45.13s-.71.58-.77.71c-.07.13.13.52.32.52s1.35-.52,1.35-.52l-.45.52,1.1-.13s.39-.32.65-.45.19.32.06.39c-.13.06,0,.84,0,.84l.52.06.32-.64.55-.64s.29-.39.87-.84c0,0,.19.32.13.45-.07.13-.52.58-.58.77-.06.19-.26.9-.39,1.29-.13.39.19.64.45.39.26-.26.45-.45.45-.58s.32-.45.32-.45c0,0,.24.15.35.23-.04-.08.11-.24.16-.36.06-.13.41.13.41.13,0,0,.3.39.43.39s.32-.32.32-.45.26-.52.26-.65.07-.45-.26-.77c-.09-.09-.51,0-.71-.07-.19-.06.39-.51.39-.64s.26-.45.32-.65c.07-.19.19-.32.45-.32s.48.39.26.58c-.22.19.22.52.22.71s.62,0,.94.07c.32.06.26.19.32.32s-.13.52-.26.77c-.13.26-.32.39-.26.65.07.26-.06.45-.19.64-.13.19-.26.52-.45,1.03-.19.51-.07,1.09,0,.97.06-.13.71-.32.97-.45.26-.13.45-.71.45-.9s.32-.39.32-.39l.58-.26s.77.26,1.03.26.19-.19.26-.39c.06-.19.52,0,.71.13.19.13.64.26,1.03.26s.32-.39.65-.58c.33-.19.19-.58.19-.77s.07-.58-.13-.71c-.19-.13.13-.45.19-.58.06-.13.56-.45.56-.45,0,0,.28-.45.28-.58s-.13-.39-.26-.71c-.13-.32.44-.26.44-.26,0,0,.33-.13.07-.32-.26-.19.26-.45.26-.45,0,0,.19-.77.26-1.03.06-.26.39.13.69.32.3.19,0,0,.28-.26.27-.26.19-.51.58-.64.39-.13.07.77,0,.97-.06.19-.32.45-.52.64-.19.19-.19,1.42-.32,1.74-.13.32.52.71.52.71,0,0,.19-.06.77-.13.13-.01,0,.58,0,.71s.52.39.52.39l.39-.26.32.52s.52-.19.58-.39c.07-.19.26-.58.26-.58l.32-.58.65.58.36-.77s.03-.71.03-1.03-.07-.65,0-.97c.06-.32.32-.44.45-.65.13-.2-.07-1.09.52-.39.58.71.84.58.84.58.32-.52.39-1.55.71-1.68.32-.13.45-.45.45-.45v-1.1l.19-.32.32-.39s.58.13.71,0c.13-.13.39-.52.39-.52,0,0,.06-.51-.13-.77-.19-.26.39-.19.39,0s.58.13.65-.32c.06-.45.26-.39.39-.39s.26.39.71.45c.45.06,0-.26,0-.52s.19-.26.64-.39c.45-.13.32.32.32.9,0,0,0,.71-.19.77-.19.06-.58.77-.58.77,0,0,.71.52.84.52s.77-.26.77-.26c0,0,.19.19.26.64.06.45.51.9,1.16.84.64-.06.84-.58.58,0-.26.58.13,1.68.13,1.68l1.16-1.35.39-.26.84.71s.26-.45.26-.72-.07-.38-.26-.51c-.19-.13-.39-.77-.39-.77,0,0,.13-.45.58-.52.45-.07.26.19.26.39s.45.71.45.71c0,0,.39.51.39.64s.58,0,.58-.13.07-.39-.13-.64c-.19-.26-.06-.39.19-.52.26-.13.13-.45.26-.58.13-.13.06-.26.71-.19.64.06.52-.27.52-.27,0,0-.26-.7-.45-.83-.19-.13-.45-.19-.9-.06-.45.13-.39.32-.58.32s-.26-.71-.39-1.04c-.13-.33,0-.38.45-.32.45.06.77.32.77.32,0,0,.64-.25.9-.51.26-.26.84.06.84.06l.39.97s.64.45.77.9c.13.45.97-.06.77-.19-.2-.13.07-.51,0-.77-.07-.26.32-.65.45-.97.13-.32.77-.19,1.03-.45.26-.26,0-.65,0-.65l.39.13s.65.39.97.45c.32.06.71.52,1.1.77.39.26.71.51,1.03.58.32.06.13.26.13.64s.32.39.58.39.45.45.58.65c.13.19,1.03.51,1.42.84.39.32.45,1.29.39,1.61-.07.32.45,1.22.51,1.42.07.19.39,1.42.45,1.93.06.52.06.58.06.9s-.13.97-.13,1.22-.13.9-.26,1.16c-.13.26-.19,1.1,0,1.23.19.13.07.32.07.52s-.13.45-.07.77c.07.32,0,.52-.13.9-.13.39.13,1.48.07,1.61-.07.13.13.51.39.97.26.45-.06.77-.13,1.03-.05.2.09.96.16,1.42-.41-.1-.8-.2-1.22-.29C37.52,88.57.12,113.84.12,113.84l.16.23c2.61-1.57,39.4-23.09,84-10.81,37.14,10.23,57.31,19.39,95.99,7.23l.31-.26c-43.23,8.88-53.19.98-83.62-7.57.01-.33.07-.43.12-.77.07-.39.13-.64.13-.97s.13-.51.13-.64-.06-.65-.06-1.16-.13-.77-.26-.84c-.13-.07-.19-.58-.19-.97,0-.13.06-.9-.13-1.29-.19-.39-.07-.58-.07-1.16s.07-1.81.19-2.32c.13-.52-.07-1.81-.07-2.39s-.32-1.93-.32-1.93c0,0,.06-.39.06-.71s.19-.19.39-.45.58-.32.71-.58c.13-.26.71-.84.97-1.1.26-.26.26-.19.58-.39.32-.19.65-.71.71-.84.06-.13.39-.39.58-.58.19-.19.97-.32,1.03-.58.06-.26.19-.06.58-.06s.45-.45.77-.77c.32-.32.65-.45.9-.65s.32.19.06.65c-.26.45.07.97.07,1.22s.45.32,1.1.07c.13-.05.19-.58.13-.9-.07-.32.45-.32.77-.58.32-.26.39-.51.64-.84.26-.32.64.32.64.32,0,0,.39.32.52.39.13.07.26.32.45.26.19-.06.65.06.84,0,.19-.06.71-.19.77.13.06.32-.32.45-.45.58-.13.13-.39.45-.39.45,0,0-.65-.39-1.29-.19-.65.19-.71.45-.39.45s.26.52.26.52c0,0,.32.19.58.26.26.06.26.51.32.71.07.19.52.39.52.39,0,0-.58.84-.71,1.1-.13.26.45.45.64.39.19-.06.52-.39.71-.64.19-.26.45-.64.45-.97s.39-.45.58-.51c.19-.07.45.84.45.84l-.52,1.29v.84s.64-.07.9-.13c.26-.07.71-.32.84-.26.13.06.06.71.06.84s1.03,1.42,1.03,1.42c0,0,.45-.58.58-.9.13-.32-.45-.64-.65-.84-.19-.19.39-.52.39-.52,0,0,1.22.39,1.35.39s.32-.32.39-.45c.07-.13.32-.84.32-1.03s.58-.45.71-.39c.13.07.39.9.45.77.07-.13.39-.65.45-.84.07-.19-.26-.58-.26-.58,0,0-.52-.45-.64-.52-.13-.06.13-1.03.26-1.55.13-.51.58-.32.77-.26.19.06.58.64.45.77-.13.13-.32.45-.32.45,0,0-.45.45,0,.58.45.13.39.13.64.07.26-.07.84-.26.84-.26l.77.71c.13,0,.32-.77.65-1.29.32-.52.58-.26.84-.26s.06.45-.07.71c-.13.26-.19.71-.19.97s.26.58.32.77c.07.19-.45.65-.39.77.07.13.19.77.32.77s.64.32.58.58c-.07.26-.58.39-.9.39s-.64.51-.77.71c-.13.19.39,0,.9,0s.52,0,.84-.13c.32-.13.64.06.64.06l.19,1.03s.45-.19.64-.45c.19-.26.65-.97.77-1.22.13-.26.58-.13.77-.13s-.26.64-.39.84c-.13.19-.26.77-.39,1.1-.13.32.58.77.58.77,0,0,.32-.45.32-.71s1.03-.32,1.03-.32c-.06.13.77.51,1.03.39.26-.13.13-.39.19-.71.07-.32.13-.71-.06-.97-.19-.26-.52-.13-.84-.13s.26-.65.26-.65l.64-1.03s.39.58.45.77c.07.19.13.39.19.71.06.32.26.13.9.07.65-.07.65.26.65.26,0,0-.39.51-.45.71-.07.19.13.77-.07,1.16-.19.39-.32.32-.39.51-.06.19-.06,1.03,0,1.23.07.19.52,0,1.03-.06.52-.07.39-.32.45-.71.06-.39.26-.13.52-.52s.26-.06.64.13c.39.19.77.26,1.03-.13s.52-.39.52-.39l1.29.77s.64-.58.9-.84.39-.9.64-.52c.26.39,1.16,1.35,1.16,1.35,0,0,.32-.26.32-.52s.19-.64.32-.39c.13.26,1.22.45,1.22.26s.19-.84.13-.97c-.06-.13.52,0,.84.13.32.13.39.77.39.9s-.13.52.06,1.29c.19.77.58.13.71.06.13-.06.26-.32.51-.39.26-.06.58.39.58.52s.52.19.9.32.45-.06.58-.26c.13-.19.39-.39.39-.39,0,0,.39.26.39.45s.13.84.06,1.03c-.06.19.45,0,.45-.26s.26-.45.39-.77c.13-.32,0-.52-.13-.77-.13-.26.52-.07.52.13s.52.13.52-.06,0-.58-.07-.77c-.06-.19-.32-.71-.32-.71,0,0-.45-.45-.52-.64-.06-.19.58-.19.58-.19,0,0,.58.32.71.58.13.26.13.64.97.84.84.19.32-.45.26-.84-.06-.39-.65-.65-.52-.9.13-.26.32-.45.32-.45,0,0-.07-.32-.19-.39-.13-.07.65-.26.71-.39.07-.13-.13-.39-.19-.52-.07-.13-.39-.26-.39-.26,0,0-.39.06-.71.13-.32.06-.39.65-.52.71-.13.07-.39-.45-.52-.52-.13-.07-.45-.26-.52-.52-.06-.26.32-.06,1.1-.32,0,0,.52-.58.58-.71.06-.13.39-.58.39-.58,0,0,.58,0,.52.13-.06.13.26.39.26.39,0,0,.58.07.77.13.19.07.39.07.52.26.13.19.45.65.45.65l.45-.13s.45-.64.39-.9c-.07-.26-.45-.19-.52-.51-.06-.32-.06-.52-.13-.77-.06-.26,0-.26.13-.51.13-.26.52-.45.52-.45,0,0-.26-.26-.39-.45-.13-.19.13-.32.32-.52.19-.19.45-.32.52-.52.07-.19.26-.45.26-.84s-.52-.71-.52-.71l-.45-.64s.32-.07.9.06c.58.13.58.39.58.39l.32.71.64.26.26-.39s.26-.39.45-.39.51.13.64.13.39,0,.58-.13c.19-.13.32-.51.45-.64.13-.13.58.19.58.19l.45.71.26-.52.26-.51s-.19-.58-.19-.71.52-.13.52-.13l.45-.26.07-.45-1.1-.19s-.52-.32-.39-.52c.13-.19.32-.26.32-.26l.9.39s.97-.26,1.03-.39c.07-.13.52-.26.52-.26,0,0-.32-.19-.77-.26-.45-.06-.26-.19-.45-.45-.19-.26.32-.77.58-.97.26-.19.19-.39.19-.39,0,0-.45,0-1.16-.13-.18-.03-.71.97-.77.84-.07-.13-.71,0-1.16-.06-.45-.06,0-.32.19-.45.19-.13.71-.39.84-.58.13-.19.13-.32.19-.52.07-.19.26-.71.39-.9.13-.19.52.06.71.13.19.06.39.06.64-.13s.32-.06.52.13c.19.19.9.13.9.13,0,0,.58-.52.58-.84Z"/></g>
+    </svg>
+
+    <!-- Your Header Text -->
+    <h1 class="text-2xl">BOADROOM</h1> 
+    
+  </header>
+  <div class="sections">
+    <!-- Turn the TV on Section -->
+    <section id="tv" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Turn the TV On
+      </h2>
+      <div class="section-content py-3">
+        <p>Using the Touch Screen Controller:</p>
+        <ul class="my-2">
+          <li>Click <span class="control-border">Room Controls</span>.</li>
+          <li>Click <span class="control-border">Displays</span>.</li>
+          <li>Click the power button for the Boardroom TV.</li>
+          <li>Click <span class="control-border">Exit</span> to return to the main menu.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Schedule a Meeting Section -->
+    <section id="schedule-meeting" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Schedule a Meeting
+      </h2>
+      <div class="section-content py-3">
+        <h3 class="text-base font-bold mb-2">Using Teams</h3>
+        <p class="mb-3">Open the Teams app.</p> 
+        <p>Schedule a new meeting, adding Boardroom as a participant.</p>
+        <ul class="my-2">
+          <li>Select Calendar.</li>
+          <li>Navigate to the desired date and time.</li>
+          <li>Press <span class="control-border">+ New Meeting</span> and configure the meeting title, start time, end time et cetera.</li>
+          <li>Add participants, including Boardroom (<a href="mailto:Boardroom@hillbrook.qld.edu.au">Boardroom@hillbrook.qld.edu.au</a>).</li>
+        </ul>
+
+        <h3 class="text-base font-bold mb-2 mt-4">Using Outlook</h3>
+        <p class="mb-3">Open the Outlook app.</p>
+        <p>Schedule a new meeting, adding Boardroom as a participant.</p>
+        <ul class="my-2">
+          <li>Select Calendar</li>
+          <li>Navigate to the desired date and time</li>
+          <li>Press <span class="control-border">New Event</span> and configure the meeting title, start time, end time et cetera</li>
+          <li>Enable the <span class="control-border">Teams Meeting</span> option</li>
+          <li>Add participants, including Boardroom (<a href="mailto:Boardroom@hillbrook.qld.edu.au">Boardroom@hillbrook.qld.edu.au</a>)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Join a Meeting Section -->
+    <section id="join-meeting" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Join a Meeting from a Phone or Computer
+      </h2>
+      <div class="section-content py-3">
+        <p>Open the Teams or Outlook app.</p>
+        <p class="important-notice font-bold my-2">Important! If you are physically in the Boardroom, mute both Mic and Speakers on your device.</p>
+        <p>Join the meeting:</p>
+        <ul class="my-2">
+          <li>Select Calendar</li>
+          <li>Navigate to today's date and, find or select the meeting and click <span class="control-border">Join</span></li>
+          <li>At this point, you can configure video and audio settings for your device. If you are physically in the Boardroom, before clicking <span class="control-border">Join now</span>, mute both Mic and Speakers on your personal device</li>
+          <li>Click <span class="control-border">Join now</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Start an Ad Hoc Meeting Section -->
+    <section id="ad-hoc-meeting" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Start an Ad Hoc Meeting in the Room
+      </h2>
+      <div class="section-content py-3">
+        <p>From the Touch Controller:</p>
+        <ul class="my-2">
+          <li>Click <span class="control-border">Meet Now</span></li>
+          <li>Click <span class="control-border">Invite someone</span> and/or dial a number</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Join a Scheduled Meeting Section -->
+    <section id="scheduled-meeting" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Join a Scheduled Meeting from the Touch Controller
+      </h2>
+      <div class="section-content py-3">
+        <p>The day's schedule is displayed on the right hand side of the touch screen's home screen. Click <span class="control-border">Join</span> to have the Boardroom join the meeting.</p>
+        <p class="my-2">Note: The <span class="control-border">Join</span> option doesn't appear until close to the meeting's start time.</p>
+      </div>
+    </section>
+
+    <!-- Sharing to the Screen Section -->
+    <section id="sharing-content" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Sharing to the Screen
+      </h2>
+      <div class="section-content py-3">
+        <!-- Subsection: When Not in a Meeting -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            When Not in a Meeting
+          </h3>
+          <div class="subsection-content py-2">
+            <ul class="my-2">
+              <li class="mb-2">Turn on the TV using the Touch Screen Controller:
+                <ul class="ml-4">
+                  <li>Click <span class="control-border">Room Controls</span></li>
+                  <li>Click <span class="control-border">Displays</span></li>
+                  <li>Click the power button for the Boardroom TV</li>
+                  <li>Click <span class="control-border">Exit</span> to return to the main menu</li>
+                </ul>
+              </li>
+              <li class="mb-2">Click <span class="control-border">Share</span> to display shared content. Note when sharing, the <span class="control-border">Share</span> button becomes the <span class="control-border">Stop Sharing</span> button.</li>
+              <li class="mb-2">By default, the TV is a Vivi display which can be accessed via the Vivi app. The room name is Admin-Boardroom.</li>
+              <li class="mb-2">It is also possible to connect via HDMI. There is a HDMI connection on the underside of the Teams touch screen controller. Plugging a device into this HDMI connection overrides the Vivi display.</li>
+            </ul>
+          </div>
+        </div>
+        <!-- Subsection: When in a Meeting -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            When in a Meeting
+          </h3>
+          <div class="subsection-content py-2">
+            <ul class="my-2">
+              <li class="mb-2">By default, the Boardroom shares a Vivi display which can be accessed via the Vivi app. The room name is Admin-Boardroom.</li>
+              <li class="mb-2">It is also possible to connect via HDMI. There is a HDMI connection on the underside of the Teams touch screen controller. Plugging a device into this HDMI connection overrides the Vivi display.</li>
+              <l class="mb-2"i>Meeting participants can share content by clicking <span class="control-border">Share</span> on the Teams meeting interface.</l>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Troubleshooting Section -->
+    <section id="troubleshooting" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Troubleshooting
+      </h2>
+      <div class="section-content py-3">
+        <!-- Troubleshooting Subsection 1 -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            Room Controls Aren't Working
+          </h3>
+          <div class="subsection-content py-2">
+            <p>Restart the computer using the Touch Controller:</p>
+            <ul class="my-2">
+              <li>Click the <span class="control-border">More</span> button</li>
+              <li>Click <span class="control-border">Restart Device</span></li>
+              <li>Did that fix it?
+                <ul class="ml-4">
+                  <li>If not, open a support ticket: <a href="mailto:helpdesk@hillbrook.qld.edu.au">Boardroom@hillbrook.qld.edu.au</a>.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Subsection 2 -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            Can't Join Using Your Phone
+          </h3>
+          <div class="subsection-content py-2">
+            <ul class="my-2">
+              <li>Try disabling wifi and using data.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Subsection 3 -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            Shared Content does not display on the Boardroom TV
+          </h3>
+          <div class="subsection-content py-2">
+            <p>Check that the display is not set to <span class="control-border">People Only</span>:</p>
+            <ul class="my-2">
+              <li>From the Touch Controller, click the <span class="control-border">Gallery</span> button (on the bottom left when in a meeting).</li>
+              <li>Make sure <span class="control-border">Content + People</span> is checked, not <span class="control-border">People Only</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Subsection 4 -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            Boardroom Speakers are Silent
+          </h3>
+          <div class="subsection-content py-2">
+            <p>Check the speakers aren't muted:</p>
+            <p class="font-semibold mt-2">If you are in a call:</p>
+            <ul class="my-2">
+              <li>From the Touch Controller Home Screen</li>
+              <li>Check that the speaker icon on the bottom of the screen isn't muted</li>
+              <li>Press <span class="control-border">+</span> or <span class="control-border">-</span> a few times to check the level isn't very low (about 40 is good)</li>
+              <li>Click <span class="control-border">...</span> to expose more menu options</li>
+              <li>Click <span class="control-border">Room Controls</span></li>
+              <li>Select <span class="control-border">Audio</span></li>
+              <li>Make sure the mute button is <em>not</em> highlighted</li>
+            </ul>
+
+            <p class="font-semibold mt-2">If you are <em>not</em> in a call:</p>
+            <ul class="my-2">
+              <li>From the Touch Controller home screen</li>
+              <li>Click <span class="control-border">Room Controls</span></li>
+              <li>Select <span class="control-border">Audio</span></li>
+              <li>Make sure the mute button is <em>not</em> highlighted</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Subsection 5 -->
+        <div class="subsection mb-3">
+          <h3 class="subsection-title font-semibold p-2 border-b border-gray-100">
+            <span class="chevron">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </span>
+            Support Contact Information
+          </h3>
+          <div class="subsection-content py-2">
+            <p>TBC</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Information Section -->
+    <section id="additional-info" class="mb-4">
+      <h2 class="section-title text-lg p-3 border-b border-gray-200">
+        <span class="chevron">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </span>
+        Additional Information
+      </h2>
+      <div class="section-content py-3">
+        <p>The Boardroom is what is technically referred to as a Microsoft Teams Room (Windows).</p>
+        <p class="my-2">Read the official documentation from Microsoft <a href="https://support.microsoft.com/en-au/office/microsoft-teams-rooms-windows-e667f40e-5aab-40c1-bd68-611fe0002ba2" target="_blank">here</a>.</p>
+      </div>
+    </section>
+  </div>
+  <footer class="text-center">
+    <svg width="100%" viewBox="0 0 1754 280" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+      <use id="Background" xlink:href="#_Image1" x="0" y="118" width="1754px" height="413px"/>
+      <defs>
+          <image id="_Image1" width="1754px" height="413px" xlink:href="data:image/png;base64,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AAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAEQhsAAAAAAAAkENoAAAAAAAAggdAGAAAAAAAACYQ2AAAAAAAASCC0AQAAAAAAQAKhDQAAAAAAABIIbQAAAAAAAJBAaAMAAAAAAIAE/x+7ijfiQ+9aSQAAAABJRU5ErkJggg=="/>
+      </defs>
+  </svg>
+  
+</div>
+
+<!-- JavaScript (No changes needed here) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Main sections: collapse all when one is clicked.
+      const section_titles = document.querySelectorAll('.section-title');
+
+      section_titles.forEach(title => {
+        title.addEventListener('click', function() {
+          const is_active = this.classList.contains('active');
+          const current_content = this.nextElementSibling; // Get the content div
+
+          // Collapse all sections FIRST
+          section_titles.forEach(t => {
+             // Only remove active if it's not the one we just clicked (or handle below)
+             if (t !== this) {
+                 t.classList.remove('active');
+                 if (t.nextElementSibling && t.nextElementSibling.classList.contains('section-content')) {
+                     t.nextElementSibling.classList.remove('active');
+                 }
+             }
+          });
+
+          // Toggle the clicked section
+          this.classList.toggle('active');
+          if (current_content && current_content.classList.contains('section-content')) {
+            current_content.classList.toggle('active');
+          }
+
+          // Ensure only the clicked one is active if it was toggled on
+          if (this.classList.contains('active')) {
+             section_titles.forEach(t => {
+                 if (t !== this) {
+                     t.classList.remove('active');
+                     if (t.nextElementSibling && t.nextElementSibling.classList.contains('section-content')) {
+                        t.nextElementSibling.classList.remove('active');
+                    }
+                 }
+             });
+          }
+
+
+        });
+      });
+
+      // Subsections: handle toggling based on parent section.
+      const subsection_titles = document.querySelectorAll('.subsection-title');
+
+      subsection_titles.forEach(title => {
+        title.addEventListener('click', function(e) {
+          // Prevent click from bubbling up to the parent section's click handler
+          e.stopPropagation();
+
+          const is_active = this.classList.contains('active');
+          const current_content = this.nextElementSibling; // Get the subsection content div
+
+          // Check if this subsection is within the troubleshooting section
+          const parentTroubleshooting = this.closest('#troubleshooting');
+
+          if (parentTroubleshooting) {
+            // Troubleshooting behavior: Accordion - Collapse others within Troubleshooting
+            const all_troubleshooting_titles = parentTroubleshooting.querySelectorAll('.subsection-title');
+
+            // Collapse all troubleshooting subsections first
+            all_troubleshooting_titles.forEach(t => {
+              // Don't remove active from the currently clicked element yet
+              if (t !== this) {
+                  t.classList.remove('active');
+                  if (t.nextElementSibling && t.nextElementSibling.classList.contains('subsection-content')) {
+                    t.nextElementSibling.classList.remove('active');
+                  }
+              }
+            });
+
+            // Toggle the clicked troubleshooting subsection
+            this.classList.toggle('active');
+             if (current_content && current_content.classList.contains('subsection-content')) {
+                current_content.classList.toggle('active');
+             }
+
+
+          } else {
+            // Default behavior for subsections outside Troubleshooting: Simple Toggle
+            this.classList.toggle('active');
+             if (current_content && current_content.classList.contains('subsection-content')) {
+                current_content.classList.toggle('active');
+             }
+          }
+        });
+      });
+    });
+</script>
+
+</body>
+</html>
