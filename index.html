@@ -207,7 +207,6 @@
         </ul>
       </div>
     </section>
-
     <!-- Join a Meeting Section -->
     <section id="join-meeting" class="mb-4">
       <h2 class="section-title text-lg p-3 border-b border-gray-200">
@@ -220,13 +219,13 @@
       </h2>
       <div class="section-content py-3">
         <p>Open the Teams or Outlook app.</p>
-        <p class="important-notice font-bold my-2">Important! If you are physically in the Boardroom, mute both Mic and Speakers on your device.</p>
-        <p>Join the meeting:</p>
         <ul class="my-2">
-          <li>Select Calendar.</li>
-          <li>Navigate to today's date and, find or select the meeting and click <span class="control-border">Join</span>.</li>
-          <li>At this point, you can configure video and audio settings for your device. If you are physically in the Boardroom, before clicking <span class="control-border">Join now</span>, mute both Mic and Speakers on your personal device</li>
-          <li>Click <span class="control-border">Join now</span>.</li>
+          <li>Select Calendar</li>
+          <li>Navigate to today's date and, find or select the meeting and click <span class="control-border">Join</span></li>
+
+        <p class="important-notice font-bold my-2">Important! If you are physically in the Boardroom, before clicking 'Join Now' in the next step, mute both Speakers and Mic on your device.</p>
+          <li>At this point, you can configure video and audio settings for your device. If you are physically in the Boardroom, before clicking <span class="control-border">Join now</span>, mute both Speakers and Mic on your personal device.</li>
+          <li>Click <span class="control-border">Join now</span></li>
         </ul>
       </div>
     </section>
@@ -436,7 +435,7 @@
             Support
           </h3>
           <div class="subsection-content py-2">
-            <p>If you are experiencing any technical issues, please submit a support request via email to the AV helpdesk. </p>
+            <p>If you are experiencing any technical issues, please submit a support request via email to the AV helpdesk, or phone ext. 496. </p>
           </div>
         </div>
       </div>
@@ -468,96 +467,78 @@
   
 </div>
 
-<!-- JavaScript (No changes needed here) -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Main sections: collapse all when one is clicked.
-      const section_titles = document.querySelectorAll('.section-title');
-
-      section_titles.forEach(title => {
-        title.addEventListener('click', function() {
-          const is_active = this.classList.contains('active');
-          const current_content = this.nextElementSibling; // Get the content div
-
-          // Collapse all sections FIRST
-          section_titles.forEach(t => {
-             // Only remove active if it's not the one we just clicked (or handle below)
-             if (t !== this) {
-                 t.classList.remove('active');
-                 if (t.nextElementSibling && t.nextElementSibling.classList.contains('section-content')) {
-                     t.nextElementSibling.classList.remove('active');
-                 }
-             }
-          });
-
-          // Toggle the clicked section
-          this.classList.toggle('active');
-          if (current_content && current_content.classList.contains('section-content')) {
-            current_content.classList.toggle('active');
-          }
-
-          // Ensure only the clicked one is active if it was toggled on
-          if (this.classList.contains('active')) {
-             section_titles.forEach(t => {
-                 if (t !== this) {
-                     t.classList.remove('active');
-                     if (t.nextElementSibling && t.nextElementSibling.classList.contains('section-content')) {
-                        t.nextElementSibling.classList.remove('active');
-                    }
-                 }
-             });
-          }
-
-
-        });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Helper function to close all subsections
+    function closeAllSubsections() {
+      const all_subsection_titles = document.querySelectorAll('.subsection-title');
+      all_subsection_titles.forEach(t => {
+        t.classList.remove('active');
+        if (t.nextElementSibling && t.nextElementSibling.classList.contains('subsection-content')) {
+          t.nextElementSibling.classList.remove('active');
+        }
       });
+    }
 
-      // Subsections: handle toggling based on parent section.
-      const subsection_titles = document.querySelectorAll('.subsection-title');
+    // Main sections: collapse all when one is clicked.
+    const section_titles = document.querySelectorAll('.section-title');
 
-      subsection_titles.forEach(title => {
-        title.addEventListener('click', function(e) {
-          // Prevent click from bubbling up to the parent section's click handler
-          e.stopPropagation();
+    section_titles.forEach(title => {
+      title.addEventListener('click', function() {
+        const is_active = this.classList.contains('active');
+        const current_content = this.nextElementSibling; // Get the content div
 
-          const is_active = this.classList.contains('active');
-          const current_content = this.nextElementSibling; // Get the subsection content div
+        // Close all subsections first
+        closeAllSubsections();
 
-          // Check if this subsection is within the troubleshooting section
-          const parentTroubleshooting = this.closest('#troubleshooting');
-
-          if (parentTroubleshooting) {
-            // Troubleshooting behavior: Accordion - Collapse others within Troubleshooting
-            const all_troubleshooting_titles = parentTroubleshooting.querySelectorAll('.subsection-title');
-
-            // Collapse all troubleshooting subsections first
-            all_troubleshooting_titles.forEach(t => {
-              // Don't remove active from the currently clicked element yet
-              if (t !== this) {
-                  t.classList.remove('active');
-                  if (t.nextElementSibling && t.nextElementSibling.classList.contains('subsection-content')) {
-                    t.nextElementSibling.classList.remove('active');
-                  }
-              }
-            });
-
-            // Toggle the clicked troubleshooting subsection
-            this.classList.toggle('active');
-             if (current_content && current_content.classList.contains('subsection-content')) {
-                current_content.classList.toggle('active');
-             }
-
-
-          } else {
-            // Default behavior for subsections outside Troubleshooting: Simple Toggle
-            this.classList.toggle('active');
-             if (current_content && current_content.classList.contains('subsection-content')) {
-                current_content.classList.toggle('active');
-             }
+        // Collapse all sections
+        section_titles.forEach(t => {
+          t.classList.remove('active');
+          if (t.nextElementSibling && t.nextElementSibling.classList.contains('section-content')) {
+            t.nextElementSibling.classList.remove('active');
           }
         });
+
+        // Toggle the clicked section (unless it was already active)
+        if (!is_active) {
+          this.classList.add('active');
+          if (current_content && current_content.classList.contains('section-content')) {
+            current_content.classList.add('active');
+          }
+        }
       });
     });
+
+    // Subsections: handle toggling based on parent section.
+    const subsection_titles = document.querySelectorAll('.subsection-title');
+
+    subsection_titles.forEach(title => {
+      title.addEventListener('click', function(e) {
+        // Prevent click from bubbling up to the parent section's click handler
+        e.stopPropagation();
+
+        const is_active = this.classList.contains('active');
+        const current_content = this.nextElementSibling; // Get the subsection content div
+
+        // Collapse all subsections first (accordion behavior for all)
+        const all_subsection_titles = document.querySelectorAll('.subsection-title');
+        all_subsection_titles.forEach(t => {
+          t.classList.remove('active');
+          if (t.nextElementSibling && t.nextElementSibling.classList.contains('subsection-content')) {
+            t.nextElementSibling.classList.remove('active');
+          }
+        });
+
+        // Toggle the clicked subsection (unless it was already active)
+        if (!is_active) {
+          this.classList.add('active');
+          if (current_content && current_content.classList.contains('subsection-content')) {
+            current_content.classList.add('active');
+          }
+        }
+      });
+    });
+  });
 </script>
 
 </body>
